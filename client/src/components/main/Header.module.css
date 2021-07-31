@@ -1,0 +1,20 @@
+.header {
+    position: absolute;
+    background-color: var(--primary-color);
+    top: 0;
+    left: 0;
+    height: var(--header-height);
+    display:flex;
+    width: 100vw;
+}
+
+.header .icon {
+    height: 4rem;
+    padding: 0.5rem;
+    margin-left: 1rem;
+}
+
+.header .icon img {
+    height: 3rem;
+    width: auto;
+}

@@ -1,0 +1,28 @@
+:root {
+    font-family: "Marriweather", "SF Pro Display", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    --primary-color: purple;
+    --secondary-color: white;
+    --text-color: black;
+    --header-height: 4rem;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+[data-theme="dark"] {
+    --primary-color: black;
+    --secondary-color: gray;
+    --text-color: black;
+}
