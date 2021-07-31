@@ -5,6 +5,7 @@
 }
 
 .form label {
+    margin-top: 1rem;
     margin-bottom: 0.25rem;
 }
 
@@ -12,8 +13,13 @@
     border: 1px solid gray;
     border-radius: 0.5rem;
     background-color: #efefef;
-    margin-bottom: 1rem;
     height: 1.5rem;
+}
+
+.invalidMessage {
+    font-size: 1rem;
+    font-weight: 300;
+    color: red;
 }
 
 .form button {

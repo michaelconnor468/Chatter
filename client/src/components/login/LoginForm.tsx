@@ -1,4 +1,5 @@
 import React from 'react';
+import config from '../../config';
 import styles from './Form.module.css';
 
 interface LoginFormProps {
@@ -6,19 +7,36 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = (props) => {
-    const submitLogin = (e: React.ChangeEvent<HTMLFormElement>) => {
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [invalidMessage, setInvalidMessage] = React.useState(null);
+
+    const submitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const rawResponse = await fetch(`${config.domain}/user/login`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username, password})
+        });
+        const responce = await rawResponse.json();
+        console.log(responce);
     }
 
     return (
+        <>
+        {invalidMessage}
         <form onSubmit={submitLogin} className={styles.form}>
             <label htmlFor='registration-username'><b>Username</b></label>
-            <input type='text' id='login-username' />
+            <input type='text' id='login-username' onBlur={(e) => setUsername(e.target.value)} />
             <label htmlFor='registration-username'><b>Password</b></label>
-            <input type='password' id='login-password' />
-            <button>Login</button>
+            <input type='password' id='login-password' onBlur={(e) => setPassword(e.target.value)} />
+            <button type='submit'>Login</button>
             <button onClick={() => props.setLogin(false)}>Create an Account</button>
         </form>
+        </>
     );
 }
 
