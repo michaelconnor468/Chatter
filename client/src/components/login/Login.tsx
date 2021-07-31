@@ -11,6 +11,7 @@ const Login: React.FC<LoginProps> = () => {
 
     return (
         <Card className={styles.card}>
+            <h1 className={styles.intro}>Welcome to Chatter! <br />Please sign in or create an account.</h1>
             {login ? <LoginForm setLogin={setLogin}/> : <RegisterForm setLogin={setLogin}/>}
         </Card>
     );
