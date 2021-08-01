@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthContext } from '../../App';
 import config from '../../config';
 import styles from './Form.module.css';
 
@@ -10,6 +11,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [invalidMessage, setInvalidMessage] = React.useState(null);
+    const authContext = React.useContext(AuthContext);
 
     const submitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -21,8 +23,9 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
             },
             body: JSON.stringify({username, password})
         });
+        console.log(rawResponse);
         const responce = await rawResponse.json();
-        console.log(responce);
+        if ( rawResponse.ok ) authContext.setJWT(responce);
     }
 
     return (

@@ -4,7 +4,7 @@ import config from './config';
 const pool = new pg.Pool({
     user: 'chatter',
     host: 'localhost',
-    port: config.port,
+    port: config.psqlPort,
     database: 'chatter'
 });
 

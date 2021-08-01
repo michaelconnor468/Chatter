@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthContext } from '../../App';
 import config from '../../config';
 import styles from './Form.module.css';
 
@@ -16,11 +17,12 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
     const [invalidUsername, setInvalidUsername] = React.useState<JSX.Element | null>(null);
     const [invalidEmail, setInvalidEmail] = React.useState<JSX.Element | null>(null);
     const [unmatchingPassword, setUnmatchingPassword] = React.useState<JSX.Element | null>(null);
+    const authContext = React.useContext(AuthContext);
 
     const submitRegister = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
         if ( unmatchingPassword || invalidPassword || invalidUsername || invalidEmail ) return;
-        const rawResponse = await fetch(`${config.domain}/user/login`, {
+        const rawResponse = await fetch(`${config.domain}/user`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -29,7 +31,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
             body: JSON.stringify({username, email, password})
         });
         const responce = await rawResponse.json();
-        console.log(responce);
+        if ( rawResponse.ok ) authContext.setJWT(responce);
     }
 
     if ( unmatchingPassword !== null && password === secondPassword ) setUnmatchingPassword(null);
