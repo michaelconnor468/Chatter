@@ -10,7 +10,7 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = (props) => {
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [invalidMessage, setInvalidMessage] = React.useState(null);
+    const [invalidMessage, setInvalidMessage] = React.useState<JSX.Element | null>(null);
     const authContext = React.useContext(AuthContext);
 
     const submitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -23,7 +23,9 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
             },
             body: JSON.stringify({username, password})
         });
+        const responce = await rawResponse.json();
         if ( rawResponse.ok ) authContext.setSignedIn(true);
+        else setInvalidMessage(<h1 className={styles.invalidMessage}>{responce.error}</h1>);
     }
 
     return (

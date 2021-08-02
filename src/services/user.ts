@@ -34,7 +34,7 @@ export default () => {
             }
             const insertQuery = await db.query(`INSERT INTO "Users" VALUES ('${req.body.username}', '${req.body.email}', '${hashedPassword.password}', '${hashedPassword.salt}');`);
             if ( insertQuery.rowCount < 1 ) {
-                res.status(500).end('{"error": "Email already taken"}');
+                res.status(500).end('{"error": "Failed to create new user"}');
                 return;
             }
             const jwt = JSON.stringify(await signJWT({username: req.body.username, hash: ''}));

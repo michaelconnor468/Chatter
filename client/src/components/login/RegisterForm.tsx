@@ -30,7 +30,9 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
             },
             body: JSON.stringify({username, email, password})
         });
+        const responce = await rawResponse.json();
         if ( rawResponse.ok ) authContext.setSignedIn(true);
+        else setInvalidMessage(<h1 className={styles.invalidMessage}>{responce.error}</h1>);
     }
 
     if ( unmatchingPassword !== null && password === secondPassword ) setUnmatchingPassword(null);
