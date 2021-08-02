@@ -13,7 +13,7 @@ export default () => {
                 SELECT f1."Friend" FROM "Friends" AS f1, "Friends" AS f2 
                     WHERE f1."User"='${req.cookies['chatter-jwt'].username}' 
                         AND f2."Friend"='${req.cookies['chatter-jwt'].username}' 
-                        AND f1."Friend"=f2."User"
+                        AND f1."Friend"=f2."User";
             `);
             if ( query.rowCount < 1 ) {
                 res.status(200).end('[]');
@@ -37,7 +37,7 @@ export default () => {
                 SELECT "User" FROM "Friends" 
                     WHERE "Friend"='${req.cookies['chatter-jwt'].username}' 
                         AND FRIEND NOT IN 
-                            (SELECT "Friend" FROM "Friends" WHERE "User"='${req.cookies['chatter-jwt'].username}')
+                            (SELECT "Friend" FROM "Friends" WHERE "User"='${req.cookies['chatter-jwt'].username}');
             `);
             if ( query.rowCount < 1 ) {
                 res.status(200).end('[]');
@@ -57,7 +57,7 @@ export default () => {
         }
 
         try {
-            const query = await db.query(`INSERT INTO "Friends" VALUES ('${req.cookies['chatter-jwt'].username}', '${req.body.username}'`);
+            const query = await db.query(`INSERT INTO "Friends" VALUES ('${req.cookies['chatter-jwt'].username}', '${req.body.username}';`);
             if ( query.rowCount < 1 ) {
                 res.status(404).end();
                 return;
@@ -76,7 +76,11 @@ export default () => {
         }
 
         try {
-            const query = await db.query(`DELETE FROM "Friends" WHERE ("User"='${req.cookies['chatter-jwt'].username}' AND "Friend"='${req.body.username}') OR ("User"='${req.body.username}' AND "Friend"='${req.cookies['chatter-jwt'].username}')`);
+            const query = await db.query(`
+                DELETE FROM "Friends" WHERE 
+                    ("User"='${req.cookies['chatter-jwt'].username}' AND "Friend"='${req.body.username}') 
+                        OR ("User"='${req.body.username}' AND "Friend"='${req.cookies['chatter-jwt'].username}');
+            `);
             if ( query.rowCount < 1 ) {
                 res.status(404).end();
                 return;

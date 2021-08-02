@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import config from '../../config';
 import Friend from './Friend';
 import styles from './FriendsList.module.css';
 import Card from '../util/Card';
@@ -6,7 +7,7 @@ import Card from '../util/Card';
 interface FriendsListProps {}
 
 const FriendsList: React.FC<FriendsListProps> = () => {
-    const [login, setLogin] = React.useState(true);
+    const friendsList = [];
 
     return (
         <Card className={styles.card}>

@@ -40,8 +40,8 @@ export default () => {
             const jwt = JSON.stringify(await signJWT({username: req.body.username, hash: ''}));
 
             if ( config.demo ) {
-                await db.query(`INSERT INTO "Friends" VALUES ('${req.body.username}', 'DemoUser'`);
-                await db.query(`INSERT INTO "Friends" VALUES ('DemoUser', '${req.body.username}'`);
+                await db.query(`INSERT INTO "Friends" VALUES ('${req.body.username}', 'DemoUser');`);
+                await db.query(`INSERT INTO "Friends" VALUES ('DemoUser', '${req.body.username}');`);
             }
 
             res.cookie('chatter-jwt', jwt, { maxAge: 60*60*1000, sameSite: 'strict' })
