@@ -7,11 +7,11 @@ import styles from './Body.module.css';
 interface BodyProps {}
 
 const Body: React.FC<BodyProps> = () => {
-    const jwt = React.useContext(AuthContext)?.jwt;
+    const authContext = React.useContext(AuthContext);
 
     return (
         <div className={styles.body}>
-            { (jwt?.username != '' && jwt?.hash != '') ? <FriendsList /> : <Login />}
+            { authContext.signedIn ? <FriendsList /> : <Login />}
         </div>
     );
 };

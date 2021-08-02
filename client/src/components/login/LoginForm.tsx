@@ -23,9 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
             },
             body: JSON.stringify({username, password})
         });
-        console.log(rawResponse);
-        const responce = await rawResponse.json();
-        if ( rawResponse.ok ) authContext.setJWT(responce);
+        if ( rawResponse.ok ) authContext.setSignedIn(true);
     }
 
     return (

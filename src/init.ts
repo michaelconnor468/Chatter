@@ -6,12 +6,14 @@ import context from './context';
 import config from './config';
 import pool from './db';
 import service from './service';
+import cookieParser from 'cookie-parser';
 
 const PORT: number = config.port;
 const app = context.router;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser())
 app.use(express.static('client/dist'));
 
 service();

@@ -30,8 +30,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
             },
             body: JSON.stringify({username, email, password})
         });
-        const responce = await rawResponse.json();
-        if ( rawResponse.ok ) authContext.setJWT(responce);
+        if ( rawResponse.ok ) authContext.setSignedIn(true);
     }
 
     if ( unmatchingPassword !== null && password === secondPassword ) setUnmatchingPassword(null);

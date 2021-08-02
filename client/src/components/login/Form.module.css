@@ -31,3 +31,7 @@
     height: 2rem;
     margin-top: 1.5rem;
 }
+
+.form button:hover {
+    filter: brightness(90%);
+}

@@ -10,17 +10,14 @@ interface JWT {
     hash: string
 }
 
-export const AuthContext = React.createContext<{jwt: JWT, setJWT: React.Dispatch<React.SetStateAction<JWT>>}>({} as {jwt: JWT, setJWT: React.Dispatch<React.SetStateAction<JWT>>});
+export const AuthContext = React.createContext<{ signedIn: boolean; setSignedIn: React.Dispatch<boolean> }>({} as { signedIn: boolean; setSignedIn: React.Dispatch<boolean> });
 
 const App: React.FC<AppProps> = () => {
     const cookie = getCookie('chatter-jwt');
-    console.log('test');
-    console.log(document.cookie);
-    if ( cookie ) console.log( JSON.parse(cookie));
-    const [jwt, setJWT] = React.useState(cookie ? JSON.parse(cookie) : {username: '', hash: ''});
+    const [signedIn, setSignedIn] = React.useState<boolean>(cookie ? JSON.parse(cookie).username && JSON.parse(cookie).hash : false);
 
     return (
-        <AuthContext.Provider value={{jwt, setJWT}}>
+        <AuthContext.Provider value={{signedIn, setSignedIn}}>
             <Header />
             <Body />
         </AuthContext.Provider>

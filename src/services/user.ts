@@ -37,8 +37,8 @@ export default () => {
                 res.status(500).end('{"error": "Email already taken"}');
                 return;
             }
-            const jwt = JSON.stringify({username: req.body.username, hash: (await hashJWT({username: req.body.username, hash: ''}))});
-            res.cookie('chatter-jwt', jwt, { maxAge: 60*60*1000 })
+            const jwt = JSON.stringify(await signJWT({username: req.body.username, hash: ''}));
+            res.cookie('chatter-jwt', jwt, { maxAge: 60*60*1000, sameSite: 'strict' })
             res.status(201).end(jwt);
         } catch (e) {
             console.trace(e);
@@ -60,9 +60,19 @@ export default () => {
                 res.status(500).end('{"error": "Password is incorrect"}');
                 return;
             }
-            const jwt = JSON.stringify({username: req.body.username, hash: (await hashJWT({username: req.body.username, hash: ''}))});
-            res.cookie('chatter-jwt', jwt, { maxAge: 60*60*1000 })
+            const jwt = JSON.stringify(await signJWT({username: req.body.username, hash: ''}));
+            res.cookie('chatter-jwt', jwt, { maxAge: 60*60*1000, sameSite: 'strict' })
             res.status(201).end(jwt);
+        } catch (e) {
+            console.trace(e);
+            res.status(500).end('{"error": "Something went wrong"}');
+        }
+    });
+
+    context.router.delete('/user/login', async (req, res) => {
+        try {
+            res.cookie('chatter-jwt', {username: '', password: ''}, { maxAge: 10, sameSite: 'strict' })
+            res.status(200).end();
         } catch (e) {
             console.trace(e);
             res.status(500).end('{"error": "Something went wrong"}');
@@ -90,7 +100,7 @@ const authorizeJWT = async (jwt: JWT) => {
     return jwt.hash === hashedJWT;
 }
 
-const hashJWT = async (jwt: JWT) => {
+const signJWT = async (jwt: JWT) => {
     let hashedJWT = jwt.username;
     for ( let i = 0; i < 5; i++ ) hashedJWT = await bcrypt.hash(hashedJWT, config.jwtkey);
     jwt.hash = hashedJWT;
