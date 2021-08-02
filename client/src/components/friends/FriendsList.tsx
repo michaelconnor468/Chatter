@@ -1,17 +1,19 @@
 import React from 'react';
+import Friend from './Friend';
 import styles from './FriendsList.module.css';
 import Card from '../util/Card';
 
-interface LoginProps {}
+interface FriendsListProps {}
 
-const Login: React.FC<LoginProps> = () => {
+const FriendsList: React.FC<FriendsListProps> = () => {
     const [login, setLogin] = React.useState(true);
 
     return (
         <Card className={styles.card}>
-            <h1>Friends</h1>
+            <Friend name='test'></Friend>
+            <Card className={styles.addfriend}><h1>+ Add Friend</h1></Card>
         </Card>
     );
 };
 
-export default Login;
+export default FriendsList;
