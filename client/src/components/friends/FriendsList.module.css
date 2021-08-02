@@ -1,7 +1,7 @@
 .card {
     width: 60%;
     margin: 2rem auto;
-    background-color: var(--primary-color);
+    background-color: #dfdfdf;
 }
 
 .addfriend {
@@ -12,9 +12,44 @@
     cursor: pointer;
 }
 
-.addfriend h1 {
+.addfriend div {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.addfriend label {
     color: var(--primary-color);
     margin: 0, 1rem;
     font-size: 3rem;
     font-weight: bold;
+}
+
+.addfriend input {
+    color: var(--primary-color);
+    width: 20rem;
+    margin: 0, 1rem;
+    font-size: 3rem;
+    color: black;
+    font-weight: bold;
+    border: 1px solid var(--primary-color);
+    border-radius: 0.5rem;
+}
+
+.addfriend button {
+    border: 0px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    height: 3rem;
+    width: 9rem;
+}
+
+.error {
+    font-size: 1rem;
+    font-weight: 400;
+    color: red;
 }

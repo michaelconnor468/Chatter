@@ -4,7 +4,9 @@ import Card from '../util/Card';
 
 interface FriendProps {
     name: string,
-    invite?: boolean
+    invite?: boolean,
+    removeFriend: (friend: string) => Promise<void>,
+    acceptInvite: (friend: string) => Promise<void>
 }
 
 const Friend: React.FC<FriendProps> = (props) => {
@@ -14,8 +16,8 @@ const Friend: React.FC<FriendProps> = (props) => {
         <Card className={styles.friend}>
             <h1>{props.name}</h1>
             <div className={styles.buttons}>
-                {props.invite ? <button>Accept</button> : <></>}
-                <button>Remove</button>
+                {props.invite ? <button onClick={() => props.acceptInvite(props.name)}>Accept</button> : <></>}
+                <button onClick={() => props.removeFriend(props.name)}>Remove</button>
             </div>
         </Card>
     );
