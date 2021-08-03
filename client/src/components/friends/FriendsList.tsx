@@ -3,10 +3,13 @@ import config from '../../config';
 import Friend from './Friend';
 import styles from './FriendsList.module.css';
 import Card from '../util/Card';
+import Chat from '../chat/Chat';
 
-interface FriendsListProps {}
+interface FriendsListProps {
+    setBody: React.Dispatch<React.SetStateAction<JSX.Element>>
+}
 
-const FriendsList: React.FC<FriendsListProps> = () => {
+const FriendsList: React.FC<FriendsListProps> = (props) => {
     const [inviteList, setInviteList] = React.useState<string[]>([]);
     const [newFriend, setNewFriend] = React.useState<string>('');
     const [friendsList, setFriendsList] = React.useState<string[]>([]);
@@ -93,7 +96,7 @@ const FriendsList: React.FC<FriendsListProps> = () => {
         <Card className={styles.card}>
             {error ? <h1 className={styles.error}>{error}</h1> : <></>}
             {inviteList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} invite={true}></Friend>)}
-            {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend}></Friend>)}
+            {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} onClick={() => props.setBody(<Chat friend={friend} />)}></Friend>)}
             <Card className={styles.addfriend}>
                 <div>
                     <label htmlFor='add-friend'>Add User:</label>

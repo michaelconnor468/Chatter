@@ -6,14 +6,15 @@ interface FriendProps {
     name: string,
     invite?: boolean,
     removeFriend: (friend: string) => Promise<void>,
-    acceptInvite: (friend: string) => Promise<void>
+    acceptInvite: (friend: string) => Promise<void>,
+    onClick?: () => void
 }
 
 const Friend: React.FC<FriendProps> = (props) => {
     const [login, setLogin] = React.useState(true);
 
     return (
-        <Card className={styles.friend}>
+        <Card className={styles.friend} onClick={props.onClick || undefined}>
             <h1>{props.name}</h1>
             <div className={styles.buttons}>
                 {props.invite ? <button onClick={() => props.acceptInvite(props.name)}>Accept</button> : <></>}

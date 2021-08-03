@@ -8,10 +8,14 @@ interface BodyProps {}
 
 const Body: React.FC<BodyProps> = () => {
     const authContext = React.useContext(AuthContext);
+    const [body, setBody] = React.useState(<></>);
+    React.useEffect(() => {
+        setBody(authContext.signedIn ? <FriendsList setBody={setBody} /> : <Login />);
+    }, [authContext]);
 
     return (
         <div className={styles.body}>
-            { authContext.signedIn ? <FriendsList /> : <Login />}
+            {body}
         </div>
     );
 };
