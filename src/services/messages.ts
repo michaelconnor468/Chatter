@@ -43,7 +43,7 @@ export default () => {
 
         try {
             const query = await db.query(`
-                SELECT "Message", "Time" 
+                SELECT "Sender", "Message", "Time"
                 FROM "Messages" 
                 WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.body.friend}') OR ("Receiver"='${cookies.username}' AND "Sender"='${req.body.friend}')
                 ORDER BY "Time" DESC
