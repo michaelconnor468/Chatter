@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from './components/main/Header';
-import Body from './components/main/Body'
+import Body from './components/main/Body';
+import config from './config';
+import { io, Socket } from '../node_modules/socket.io-client/build/index';
 import styles from './App.module.css';
 import './App.css';
 
@@ -10,14 +12,16 @@ interface JWT {
     hash: string
 }
 
-export const AuthContext = React.createContext<{ signedIn: string; setSignedIn: React.Dispatch<string> }>({} as { signedIn: string; setSignedIn: React.Dispatch<string> });
+export const AuthContext = React.createContext<{ signedIn: string, setSignedIn: React.Dispatch<string>, socket: Socket }>({} as { signedIn: string, setSignedIn: React.Dispatch<string>, socket: Socket });
 
 const App: React.FC<AppProps> = () => {
     const cookie = getCookie('chatter-jwt');
     const [signedIn, setSignedIn] = React.useState<string>(cookie && JSON.parse(cookie).username && JSON.parse(cookie).hash ? JSON.parse(cookie).username : '');
 
+    const socket = io(config.domain);
+
     return (
-        <AuthContext.Provider value={{signedIn, setSignedIn}}>
+        <AuthContext.Provider value={{signedIn, setSignedIn, socket}}>
             <Header />
             <Body />
         </AuthContext.Provider>

@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import path from 'path';
 import cors from 'cors';
+import { Server } from 'socket.io';
 import context from './context';
 import config from './config';
 import pool from './db';
@@ -18,6 +19,16 @@ app.use(express.static('client/dist'));
 
 service();
 
-app.listen(PORT, () => {
+const server = http.createServer(app);
+const io = new Server(server);
+
+io.on('connection', socket => {
+  const cookie = socket.handshake.headers.cookie;
+  if ( !cookie ) return;
+  const jwt = JSON.parse(context.getCookie('chatter-jwt', cookie));
+  if ( context.authorizeJWT(jwt) ) context.sockets.set(jwt.username, socket);
+});
+
+server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
