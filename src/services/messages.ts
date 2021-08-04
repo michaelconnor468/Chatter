@@ -30,7 +30,7 @@ export default () => {
             res.status(201).end();
         } catch (e) {
             console.trace(e);
-            res.status(200).end();
+            res.status(500).end('{"error": "Something went wrong"}');
         }
     });
 
@@ -43,9 +43,9 @@ export default () => {
 
         try {
             const query = await db.query(`
-                SELECT "Sender", "Message", "Time"
+                SELECT *
                 FROM "Messages" 
-                WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.body.friend}') OR ("Receiver"='${cookies.username}' AND "Sender"='${req.body.friend}')
+                WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.query.friend}') OR ("Receiver"='${cookies.username}' AND "Sender"='${req.query.friend}')
                 ORDER BY "Time" DESC
                 LIMIT 20
             `);
@@ -56,12 +56,12 @@ export default () => {
             const updateQuery = await db.query(`
                 UPDATE "Messages"
                 SET "Read"='TRUE'
-                WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.body.friend}') OR ("Receiver"='${cookies.username}' AND "Sender"='${req.body.friend}')
+                WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.query.friend}') OR ("Receiver"='${cookies.username}' AND "Sender"='${req.query.friend}')
             `);
-            res.status(201).end(query.rows);
+            res.status(201).end(JSON.stringify(query.rows));
         } catch (e) {
             console.trace(e);
-            res.status(200).end();
+            res.status(500).end('{"error": "Something went wrong"}');
         }
     });
 }

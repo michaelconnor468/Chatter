@@ -96,7 +96,7 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
         <Card className={styles.card}>
             {error ? <h1 className={styles.error}>{error}</h1> : <></>}
             {inviteList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} invite={true}></Friend>)}
-            {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} onClick={() => props.setBody(<Chat friend={friend} />)}></Friend>)}
+            {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} onClick={() => props.setBody(<Chat friend={friend} setBody={props.setBody} />)}></Friend>)}
             <Card className={styles.addfriend}>
                 <div>
                     <label htmlFor='add-friend'>Add User:</label>

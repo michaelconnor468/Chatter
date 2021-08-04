@@ -15,7 +15,7 @@ CREATE TABLE "Friends" (
 CREATE TABLE "Messages" (
     "Sender" TEXT NOT NULL REFERENCES "Users" ("Username"),
     "Receiver" TEXT NOT NULL REFERENCES "Users" ("Username"),
-    "Time" DATETIME NOT NULL,
+    "Time" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "Message" TEXT NOT NULL,
-    "Read" BOOLEAN NOT NULL
+    "Read" BOOLEAN NOT NULL DEFAULT 'FALSE'
 );

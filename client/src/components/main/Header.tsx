@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = () => {
             },
             body: ''
         });
-        authContext.setSignedIn(false);
+        authContext.setSignedIn('');
     };
 
     return (

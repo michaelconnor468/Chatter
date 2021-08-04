@@ -10,11 +10,11 @@ interface JWT {
     hash: string
 }
 
-export const AuthContext = React.createContext<{ signedIn: boolean; setSignedIn: React.Dispatch<boolean> }>({} as { signedIn: boolean; setSignedIn: React.Dispatch<boolean> });
+export const AuthContext = React.createContext<{ signedIn: string; setSignedIn: React.Dispatch<string> }>({} as { signedIn: string; setSignedIn: React.Dispatch<string> });
 
 const App: React.FC<AppProps> = () => {
     const cookie = getCookie('chatter-jwt');
-    const [signedIn, setSignedIn] = React.useState<boolean>(cookie ? JSON.parse(cookie).username && JSON.parse(cookie).hash : false);
+    const [signedIn, setSignedIn] = React.useState<string>(cookie && JSON.parse(cookie).username && JSON.parse(cookie).hash ? JSON.parse(cookie).username : '');
 
     return (
         <AuthContext.Provider value={{signedIn, setSignedIn}}>
@@ -25,7 +25,7 @@ const App: React.FC<AppProps> = () => {
 };
 
 const getCookie = (cname: string) => {
-    let name = cname + "=";
+    let name = cname + '=';
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
     for(let i = 0; i <ca.length; i++) {
@@ -37,7 +37,7 @@ const getCookie = (cname: string) => {
         return c.substring(name.length, c.length);
       }
     }
-    return "";
+    return '';
 }
 
 export default App;

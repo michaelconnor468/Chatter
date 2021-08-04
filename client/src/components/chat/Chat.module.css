@@ -10,6 +10,34 @@
 
 .content {
     height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.primarymessage {
+    max-width: 70%;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem;
+    font-size: 2rem;
+    box-shadow: 0px 0px 4px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    align-self: flex-end;
+}
+
+.secondarymessage {
+    max-width: 70%;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem;
+    font-size: 2rem;
+    box-shadow: 0px 0px 4px;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    align-self: flex-start;
 }
 
 .chat hr {
@@ -24,7 +52,6 @@
     font-weight: bold;
     color: var(--primary-color);
     margin: 1rem;
-    width: 100%;
     text-align: left;
 }
 
@@ -37,22 +64,31 @@
 
 .input input {
     width: 80%;
-    height: 3rem;
-    font-size: 1rem;
+    font-size: 2rem;
+    padding: 1rem;
     border: 1px solid var(--primary-color);
     border-radius: 0.5rem;
 }
 
-.input button {
+.chat button {
     border: 0px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 2rem;
     border-radius: 0.5rem;
     background-color: var(--primary-color);
     color: var(--secondary-color);
-    height: 3rem;
-    width: 8rem;
+    height: 4rem;
+    width: 10rem;
     margin-left: auto;
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 1rem;
+    justify-content: space-between;
 }
 
 .chat button:hover {

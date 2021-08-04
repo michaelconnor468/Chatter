@@ -24,7 +24,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
             body: JSON.stringify({username, password})
         });
         const responce = await rawResponse.json();
-        if ( rawResponse.ok ) authContext.setSignedIn(true);
+        if ( rawResponse.ok ) authContext.setSignedIn(username);
         else setInvalidMessage(<h1 className={styles.invalidMessage}>{responce.error}</h1>);
     }
 
@@ -33,9 +33,9 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
         {invalidMessage}
         <form onSubmit={submitLogin} className={styles.form}>
             <label htmlFor='registration-username'><b>Username</b></label>
-            <input type='text' id='login-username' onBlur={(e) => setUsername(e.target.value)} />
+            <input type='text' id='login-username' onChange={(e) => setUsername(e.target.value)} />
             <label htmlFor='registration-username'><b>Password</b></label>
-            <input type='password' id='login-password' onBlur={(e) => setPassword(e.target.value)} />
+            <input type='password' id='login-password' onChange={(e) => setPassword(e.target.value)} />
             <button type='submit'>Login</button>
             <button onClick={() => props.setLogin(false)}>Create an Account</button>
         </form>
