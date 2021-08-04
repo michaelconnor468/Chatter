@@ -11,3 +11,11 @@ CREATE TABLE "Friends" (
     "User" TEXT NOT NULL REFERENCES "Users" ("Username"),
     "Friend" TEXT NOT NULL REFERENCES "Users" ("Username")
 );
+
+CREATE TABLE "Messages" (
+    "Sender" TEXT NOT NULL REFERENCES "Users" ("Username"),
+    "Receiver" TEXT NOT NULL REFERENCES "Users" ("Username"),
+    "Time" DATETIME NOT NULL,
+    "Message" TEXT NOT NULL,
+    "Read" BOOLEAN NOT NULL
+);
