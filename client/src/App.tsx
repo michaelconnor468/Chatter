@@ -16,9 +16,12 @@ export const AuthContext = React.createContext<{ signedIn: string, setSignedIn: 
 
 const App: React.FC<AppProps> = () => {
     const cookie = getCookie('chatter-jwt');
+    // Used as a context to simplify logic pertaining to current user.
     const [signedIn, setSignedIn] = React.useState<string>(cookie && JSON.parse(cookie).username && JSON.parse(cookie).hash ? JSON.parse(cookie).username : '');
+    const [socket, setSocket] = React.useState(io(config.domain));
 
-    const socket = io(config.domain);
+    // Reconnect to socket as long as client-side application runs.
+    socket.on('disconnect', () => setSocket(io(config.domain)));
 
     return (
         <AuthContext.Provider value={{signedIn, setSignedIn, socket}}>

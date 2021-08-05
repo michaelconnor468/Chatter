@@ -27,6 +27,7 @@ export default () => {
                 res.status(404).end();
                 return;
             }
+            context.sockets.get(req.body.friend)?.socket.emit('message', query.rows);
             res.status(201).end();
         } catch (e) {
             console.trace(e);

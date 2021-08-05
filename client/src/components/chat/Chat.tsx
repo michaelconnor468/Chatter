@@ -51,9 +51,11 @@ const Chat: React.FC<ChatProps> = (props) => {
         setMessage('');
     };
 
+    authContext.socket.on('message', (message: Message) => setMessages(messages => [...messages, {Sender: authContext.signedIn, Receiver: props.friend, Message: message.Message, Time: new Date()}]));
+
     return (
         <Card className={styles.chat}>
-            <div className={styles.header}><h1>{props.friend}</h1> <button onClick={() => props.setBody(<FriendsList setBody={props.setBody} />)}>Close</button></div>
+            <div className={styles.header}><h1>{props.friend}</h1> <button onClick={() => {authContext.socket.off('message'); props.setBody(<FriendsList setBody={props.setBody} />);}}>Close</button></div>
             <hr />
             <div className={styles.content}>
                 {messages
