@@ -25,7 +25,7 @@ const io = new Server(server);
 io.on('connection', socket => {
   const cookie = socket.handshake.headers.cookie;
   if ( !cookie ) return;
-  const jwt = JSON.parse(context.getCookie('chatter-jwt', cookie));
+  const jwt = JSON.parse(context.getCookie('chatter-jwt', decodeURIComponent(cookie)));
   if ( context.authorizeJWT(jwt) )
     context.sockets.set(jwt.username, 
       {

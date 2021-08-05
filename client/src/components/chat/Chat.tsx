@@ -35,7 +35,10 @@ const Chat: React.FC<ChatProps> = (props) => {
         if ( rawResponse.ok ) setMessages((await rawResponse.json()).map((msg: Message) => {return {...msg, Time: new Date(msg.Time)};}));
     };
 
-    React.useEffect(() => {getMessages();}, []);
+    React.useEffect(() => {
+        getMessages();
+        authContext.socket.on('message', (message: Message) => setMessages(messages => [...messages, {Sender: message.Sender, Receiver: message.Receiver, Message: message.Message, Time: new Date()}]));
+    }, []);
 
     const sendMessage = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -50,8 +53,6 @@ const Chat: React.FC<ChatProps> = (props) => {
         if ( rawResponse.ok ) setMessages(messages => [...messages, {Sender: authContext.signedIn, Receiver: props.friend, Message: message, Time: new Date()}]);
         setMessage('');
     };
-
-    authContext.socket.on('message', (message: Message) => setMessages(messages => [...messages, {Sender: authContext.signedIn, Receiver: props.friend, Message: message.Message, Time: new Date()}]));
 
     return (
         <Card className={styles.chat}>

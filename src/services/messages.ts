@@ -27,7 +27,7 @@ export default () => {
                 res.status(404).end();
                 return;
             }
-            context.sockets.get(req.body.friend)?.socket.emit('message', query.rows);
+            context.sockets.get(req.body.friend)?.socket.emit('message', {Sender: cookies.username, Receiver: req.body.friend, Message: req.body.message, Time: (new Date()).toUTCString(), Read: true});
             res.status(201).end();
         } catch (e) {
             console.trace(e);
