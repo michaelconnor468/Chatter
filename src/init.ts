@@ -26,7 +26,13 @@ io.on('connection', socket => {
   const cookie = socket.handshake.headers.cookie;
   if ( !cookie ) return;
   const jwt = JSON.parse(context.getCookie('chatter-jwt', cookie));
-  if ( context.authorizeJWT(jwt) ) context.sockets.set(jwt.username, socket);
+  if ( context.authorizeJWT(jwt) ) 
+    context.sockets.set(jwt.username, 
+      {
+        socket: socket, 
+        timer: setTimeout(() => {socket.disconnect(true); context.sockets.delete(jwt.username);}, 1000*60*10)
+      }
+    );
 });
 
 server.listen(PORT, () => {

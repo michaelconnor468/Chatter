@@ -2,7 +2,6 @@ import express from 'express';
 import io from 'socket.io';
 import bcrypt from 'bcrypt';
 import config from './config';
-import { authenticate } from 'passport';
 
 export default {
     router: express(),
@@ -11,7 +10,7 @@ export default {
         for ( let i = 0; i < 5; i++ ) hashedJWT = await bcrypt.hash(hashedJWT, config.jwtkey);
         return jwt.hash === hashedJWT;
     },
-    sockets: new Map<string, io.Socket>(),
+    sockets: new Map<string, {socket: io.Socket, timer: ReturnType<typeof setTimeout>}>(),
     getCookie: (cname: string, cookie: string) => {
         let name = cname + '=';
         let decodedCookie = cookie;
