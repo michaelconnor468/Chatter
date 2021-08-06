@@ -15,7 +15,7 @@ const app = context.router;
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser())
-app.use(express.static('client/dist'));
+app.use(express.static('client'));
 
 service();
 

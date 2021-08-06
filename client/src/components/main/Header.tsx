@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = () => {
     return (
         <header className={styles.header}>
             <div className={styles.icon}>
-                <img src='../resources/chaticonwhite.png'/>
+                <img src='resources/chaticonwhite.png'/>
             </div>
             { authContext.signedIn ? <button className={styles.signout} onClick={signOut}>Sign Out</button> : <></> }
         </header>

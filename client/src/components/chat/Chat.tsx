@@ -33,6 +33,7 @@ const Chat: React.FC<ChatProps> = (props) => {
             }
         });
         if ( rawResponse.ok ) setMessages((await rawResponse.json()).map((msg: Message) => {return {...msg, Time: new Date(msg.Time)};}));
+        document.getElementsByClassName(styles.content)[0].scrollTop = 99999;
     };
 
     React.useEffect(() => {
@@ -61,9 +62,7 @@ const Chat: React.FC<ChatProps> = (props) => {
             <div className={styles.content}>
                 {messages
                     .sort((a, b) => (a.Time.getTime() - b.Time.getTime()))
-                    .map(message => 
-                        <p className={message.Sender === authContext.signedIn ? styles.primarymessage : styles.secondarymessage}>{message.Message}</p>
-                    )}
+                    .map(message => <p className={message.Sender === authContext.signedIn ? styles.primarymessage : styles.secondarymessage}>{message.Message}</p>)}
             </div>
             <form className={styles.input} onSubmit={e => sendMessage(e)}><input type='text' value={message} onChange={(e) => setMessage(e.target.value.substring(0, Math.min(e.target.value.length, 140)))}></input><button onClick={e => sendMessage(e)}>Send</button></form>
         </Card>
