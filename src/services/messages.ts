@@ -46,7 +46,8 @@ export default () => {
             const query = await db.query(`
                 SELECT *
                 FROM "Messages" 
-                WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.query.friend}') OR ("Receiver"='${cookies.username}' AND "Sender"='${req.query.friend}')
+                WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.query.friend}') 
+                    OR ("Receiver"='${cookies.username}' AND "Sender"='${req.query.friend}')
                 ORDER BY "Time" DESC
                 LIMIT 20
             `);
@@ -57,7 +58,8 @@ export default () => {
             const updateQuery = await db.query(`
                 UPDATE "Messages"
                 SET "Read"='TRUE'
-                WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.query.friend}') OR ("Receiver"='${cookies.username}' AND "Sender"='${req.query.friend}')
+                WHERE ("Sender"='${cookies.username}' AND "Receiver"='${req.query.friend}') 
+                    OR ("Receiver"='${cookies.username}' AND "Sender"='${req.query.friend}')
             `);
             res.status(201).end(JSON.stringify(query.rows));
         } catch (e) {

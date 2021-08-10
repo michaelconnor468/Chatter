@@ -89,7 +89,7 @@ export default () => {
 const validateUser = (user: User, email: boolean): boolean => {
     if ( !user.password.match(/^[a-z0-9A-Z\.\_\-]{6,20}$/) ) return false;
     if ( !user.username.match(/^[a-z0-9A-Z\.\_\-]{1,20}$/) ) return false;
-    if ( email && !user.email.match(/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/) ) return false;
+    if ( email && !user.email.match(config.emailRegex) ) return false;
     return true;
 }
 
