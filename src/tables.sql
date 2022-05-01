@@ -6,6 +6,7 @@ CREATE TABLE "Users" (
 );
 
 INSERT INTO "Users" VALUES ('DemoUser', 'demouser@michaelconnor.ca', '$2b$10$YoSsiOSvTYXVXZda17hGgOUWJEkqJ5KfhLq8MH0yWQ2sVF3R/5Mn2', '$2b$10$YoSsiOSvTYXVXZda17hGgO');
+INSERT INTO "Users" VALUES ('DemoUser2', 'demouser2@michaelconnor.ca', '$2b$10$YoSsiOSvTYXVXZda17hGgOUWJEkqJ5KfhLq8MH0yWQ2sVF3R/5Mn2', '$2b$10$YoSsiOSvTYXVXZda17hGgO');
 
 CREATE TABLE "Friends" (
     "User" TEXT NOT NULL REFERENCES "Users" ("Username"),
@@ -18,4 +19,9 @@ CREATE TABLE "Messages" (
     "Time" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "Message" TEXT NOT NULL,
     "Read" BOOLEAN NOT NULL DEFAULT 'FALSE'
+);
+
+CREATE TABLE "VideoRooms" (
+    "Owner" TEXT NOT NULL REFERENCES "Users" ("Username"),
+    "Guest" TEXT NOT NULL REFERENCES "Users" ("Username")
 );

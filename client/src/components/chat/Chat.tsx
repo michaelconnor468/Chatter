@@ -4,7 +4,6 @@ import Card from '../util/Card';
 import config from '../../config';
 import styles from './Chat.module.css';
 import FriendsList from '../friends/FriendsList';
-import { response } from 'express';
 
 interface ChatProps { 
     friend: string,

@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './components/main/Header';
 import Body from './components/main/Body';
 import config from './config';
-import { io, Socket } from '../node_modules/socket.io-client/build/index';
+import { io, Socket } from 'socket.io-client';
 import styles from './App.module.css';
 import './App.css';
 

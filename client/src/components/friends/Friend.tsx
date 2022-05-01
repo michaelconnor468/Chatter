@@ -18,7 +18,7 @@ const Friend: React.FC<FriendProps> = (props) => {
             <h1>{props.name}</h1>
             <div className={styles.buttons}>
                 {props.invite ? <button onClick={() => props.acceptInvite(props.name)}>Accept</button> : <></>}
-                <button onClick={() => props.removeFriend(props.name)}>Remove</button>
+                <button onClick={(e) => {props.removeFriend(props.name); e.stopPropagation();}}>Remove</button>
             </div>
         </Card>
     );
