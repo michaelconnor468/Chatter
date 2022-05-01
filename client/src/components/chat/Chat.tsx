@@ -4,6 +4,7 @@ import Card from '../util/Card';
 import config from '../../config';
 import styles from './Chat.module.css';
 import FriendsList from '../friends/FriendsList';
+import Video from './Video';
 
 interface ChatProps { 
     friend: string,
@@ -54,16 +55,27 @@ const Chat: React.FC<ChatProps> = (props) => {
         setMessage('');
     };
 
+    const requestVideo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        props.setBody(<Video friend={props.friend} setBody={props.setBody} />);
+    }
+
     return (
         <Card className={styles.chat}>
-            <div className={styles.header}><h1>{props.friend}</h1> <button onClick={() => {authContext.socket.off('message'); props.setBody(<FriendsList setBody={props.setBody} />);}}>Close</button></div>
+            <div className={styles.header}>
+                <h1>{props.friend}</h1> <button onClick={() => {authContext.socket.off('message'); props.setBody(<FriendsList setBody={props.setBody} />);}}>Close</button>
+            </div>
             <hr />
             <div className={styles.content}>
                 {messages
                     .sort((a, b) => (a.Time.getTime() - b.Time.getTime()))
                     .map(message => <p className={message.Sender === authContext.signedIn ? styles.primarymessage : styles.secondarymessage}>{message.Message}</p>)}
             </div>
-            <form className={styles.input} onSubmit={e => sendMessage(e)}><input type='text' value={message} onChange={(e) => setMessage(e.target.value.substring(0, Math.min(e.target.value.length, 140)))}></input><button onClick={e => sendMessage(e)}>Send</button></form>
+            <form className={styles.input} onSubmit={sendMessage}>
+                <input type='text' value={message} onChange={(e) => setMessage(e.target.value.substring(0, Math.min(e.target.value.length, 140)))}></input>
+                <button onClick={requestVideo}>Call</button>
+                <button onClick={sendMessage}>Send</button>
+            </form>
         </Card>
     );
 };
