@@ -15,6 +15,10 @@ interface JWT {
 
 export default () => {
     context.router.post('/messages', async (req, res) => {
+        if ( !req.cookies ) {
+            res.status(401).end();
+            return;
+        }
         const cookies = JSON.parse(req.cookies['chatter-jwt']);
         if ( !cookies || !context.authorizeJWT(cookies) ) {
             res.status(401).end();
@@ -36,6 +40,10 @@ export default () => {
     });
 
     context.router.get('/messages', async (req, res) => {
+        if ( !req.cookies ) {
+            res.status(401).end();
+            return;
+        }
         const cookies = JSON.parse(req.cookies['chatter-jwt']);
         if ( !cookies || !context.authorizeJWT(cookies) ) {
             res.status(401).end();

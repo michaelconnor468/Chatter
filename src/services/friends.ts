@@ -3,6 +3,10 @@ import db from '../db';
 
 export default () => {
     context.router.get('/friends', async (req, res) => {
+        if ( !req.cookies ) {
+            res.status(401).end();
+            return;
+        }
         const cookies = JSON.parse(req.cookies['chatter-jwt']);
 
         if ( !cookies || !context.authorizeJWT(cookies) ) {
@@ -29,6 +33,10 @@ export default () => {
     });
 
     context.router.get('/friends/invites', async (req, res) => {
+        if ( !req.cookies ) {
+            res.status(401).end();
+            return;
+        }
         const cookies = JSON.parse(req.cookies['chatter-jwt']);
         if ( !cookies || !context.authorizeJWT(cookies) ) {
             res.status(401).end();
@@ -50,6 +58,10 @@ export default () => {
     });
 
     context.router.post('/friends', async (req, res) => {
+        if ( !req.cookies ) {
+            res.status(401).end();
+            return;
+        }
         const cookies = JSON.parse(req.cookies['chatter-jwt']);
         if ( !cookies || !context.authorizeJWT(cookies) ) {
             res.status(401).end();
@@ -57,6 +69,10 @@ export default () => {
         }
 
         try {
+            if ( cookies.username === req.body.username ) {
+                res.status(201).end();
+                return;
+            }
             const query = await db.query(`INSERT INTO "Friends" VALUES ('${cookies.username}', '${req.body.username}');`);
             if ( query.rowCount < 1 ) {
                 res.status(404).end();
@@ -70,6 +86,10 @@ export default () => {
     });
 
     context.router.delete('/friends', async (req, res) => {
+        if ( !req.cookies ) {
+            res.status(401).end();
+            return;
+        }
         const cookies = JSON.parse(req.cookies['chatter-jwt']);
         if ( !cookies || !context.authorizeJWT(cookies) ) {
             res.status(401).end();

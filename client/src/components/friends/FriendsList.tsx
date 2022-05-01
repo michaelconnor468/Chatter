@@ -15,7 +15,7 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
     const [friendsList, setFriendsList] = React.useState<string[]>([]);
     const [error, setError] = React.useState<string>('');
 
-    React.useEffect(() => {fetchFriendsList();}, [])
+    React.useEffect(() => {fetchFriendsList();}, []);
 
     const fetchFriendsList = async () => {
         const rawResponse = await fetch(`${config.domain}/friends/invites`, {
