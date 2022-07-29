@@ -1,4 +1,4 @@
-CREATE USER "chatter";
+CREATE USER "chatter" WITH PASSWORD 'password';
 CREATE DATABASE "chatter" WITH OWNER="chatter";
 \c "chatter" "chatter";
 

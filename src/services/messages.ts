@@ -13,6 +13,10 @@ interface JWT {
     hash: string
 }
 
+const getErrorResponse = (e: Error) => {
+    return '{"error": "Something went wrong"}'
+}
+
 export default () => {
     context.router.post('/messages', async (req, res) => {
         if ( !req.cookies ) {
@@ -35,7 +39,7 @@ export default () => {
             res.status(201).end();
         } catch (e) {
             console.trace(e);
-            res.status(500).end('{"error": "Something went wrong"}');
+            res.status(500).end(getErrorResponse(e));
         }
     });
 
@@ -72,7 +76,7 @@ export default () => {
             res.status(201).end(JSON.stringify(query.rows));
         } catch (e) {
             console.trace(e);
-            res.status(500).end('{"error": "Something went wrong"}');
+            res.status(500).end(getErrorResponse(e));
         }
     });
 }

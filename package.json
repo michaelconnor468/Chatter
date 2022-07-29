@@ -1,5 +1,5 @@
 {
-  "name": "Quickfi",
+  "name": "Chatter",
   "version": "1.0.0",
   "description": "Chatter is a minimalist messaging app with user accounts and authentication.",
   "scripts": {
@@ -9,15 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/michaelconnor468/QuickFi.git"
+    "url": "git+https://github.com/michaelconnor468/Chatter.git"
   },
   "keywords": [],
   "author": "Michael J. Connor",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/michaelconnor468/QuickFi/issues"
-  },
-  "homepage": "https://github.com/michaelconnor468/QuickFi#readme",
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.2",

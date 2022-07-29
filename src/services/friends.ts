@@ -1,5 +1,10 @@
 import context from "../context";
 import db from '../db';
+import config from '../config';
+
+const getErrorResponse = (e: Error) => {
+    return '{"error": "Something went wrong"}'
+}
 
 export default () => {
     context.router.get('/friends', async (req, res) => {
@@ -28,7 +33,7 @@ export default () => {
             res.status(200).end(JSON.stringify(query.rows));
         } catch (e) {
             console.trace(e);
-            res.status(500).end('{"error": "Something went wrong"}');
+            res.status(500).end(getErrorResponse(e));
         }
     });
 
@@ -53,7 +58,7 @@ export default () => {
             res.status(200).end(JSON.stringify(query.rows));
         } catch (e) {
             console.trace(e);
-            res.status(500).end('{"error": "Something went wrong"}');
+            res.status(500).end(getErrorResponse(e));
         }
     });
 
@@ -109,7 +114,7 @@ export default () => {
             res.status(201).end();
         } catch (e) {
             console.trace(e);
-            res.status(500).end('{"error": "Something went wrong"}');
+            res.status(500).end(getErrorResponse(e));
         }
     });
 };

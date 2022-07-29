@@ -3,9 +3,10 @@ import config from './config';
 
 const pool = new pg.Pool({
     user: 'chatter',
-    host: 'localhost',
+    host: config.psqlHost,
     port: config.psqlPort,
-    database: 'chatter'
+    database: 'chatter',
+    password: 'password'
 });
 
 export default pool;
