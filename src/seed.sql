@@ -1,3 +1,7 @@
+CREATE USER "chatter";
+CREATE DATABASE "chatter" WITH OWNER="chatter";
+\c "chatter" "chatter";
+
 CREATE TABLE "Users" (
     "Username" TEXT NOT NULL PRIMARY KEY,
     "Email" TEXT NOT NULL UNIQUE,
