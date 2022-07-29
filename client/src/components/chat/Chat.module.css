@@ -8,6 +8,19 @@
     align-items: center;
 }
 
+.webcams {
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.webcams div {
+    width: 40%;
+    height: 100%;
+}
+
 .content {
     height: 70%;
     width: 100%;
