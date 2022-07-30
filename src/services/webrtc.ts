@@ -1,7 +1,7 @@
 import context from '../context';
+import {Pool} from "pg";
 import {Router} from 'express';
 import config from '../config';
-import db from '../db';
 
 interface User {
     username: string,
@@ -18,7 +18,7 @@ const getErrorResponse = (e: Error) => {
     return '{"error": "Something went wrong"}'
 }
 
-export default (router: Router) => {
+export default (router: Router, db: Pool) => {
     router.post('/webrtc', async (req, res) => {
         if ( !req.cookies ) {
             res.status(401).end();

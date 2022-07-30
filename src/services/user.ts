@@ -1,8 +1,8 @@
 import context from '../context';
+import {Pool} from "pg";
 import {Router} from 'express';
 import config from '../config';
 import bcrypt from 'bcrypt';
-import db from '../db';
 
 interface User {
     username: string,
@@ -19,7 +19,7 @@ const getErrorResponse = (e: Error) => {
     return '{"error": "Something went wrong"}'
 }
 
-export default (router: Router) => {
+export default (router: Router, db: Pool) => {
     router.post('/user', async (req, res) => {
         try {
             if ( !validateUser(req.body, true) ) {

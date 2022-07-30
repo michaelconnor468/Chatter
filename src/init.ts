@@ -17,7 +17,7 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(express.static('client'));
 
-service(app);
+service(app, pool);
 
 const server = http.createServer(app);
 const io = new Server(server);

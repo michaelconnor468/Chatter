@@ -1,13 +1,13 @@
 import context from "../context";
+import {Pool} from "pg";
 import {Router} from 'express';
-import db from '../db';
 import config from '../config';
 
 const getErrorResponse = (e: Error) => {
     return '{"error": "Something went wrong"}'
 }
 
-export default (router: Router) => {
+export default (router: Router, db: Pool) => {
     router.get('/friends', async (req, res) => {
         if ( !req.cookies ) {
             res.status(401).end();
