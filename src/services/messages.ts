@@ -1,4 +1,5 @@
 import context from '../context';
+import {Router} from 'express';
 import config from '../config';
 import db from '../db';
 
@@ -17,8 +18,8 @@ const getErrorResponse = (e: Error) => {
     return '{"error": "Something went wrong"}'
 }
 
-export default () => {
-    context.router.post('/messages', async (req, res) => {
+export default (router: Router) => {
+    router.post('/messages', async (req, res) => {
         if ( !req.cookies ) {
             res.status(401).end();
             return;
@@ -43,7 +44,7 @@ export default () => {
         }
     });
 
-    context.router.get('/messages', async (req, res) => {
+    router.get('/messages', async (req, res) => {
         if ( !req.cookies ) {
             res.status(401).end();
             return;

@@ -1,4 +1,5 @@
 import context from "../context";
+import {Router} from 'express';
 import db from '../db';
 import config from '../config';
 
@@ -6,8 +7,8 @@ const getErrorResponse = (e: Error) => {
     return '{"error": "Something went wrong"}'
 }
 
-export default () => {
-    context.router.get('/friends', async (req, res) => {
+export default (router: Router) => {
+    router.get('/friends', async (req, res) => {
         if ( !req.cookies ) {
             res.status(401).end();
             return;
@@ -37,7 +38,7 @@ export default () => {
         }
     });
 
-    context.router.get('/friends/invites', async (req, res) => {
+    router.get('/friends/invites', async (req, res) => {
         if ( !req.cookies ) {
             res.status(401).end();
             return;
@@ -62,7 +63,7 @@ export default () => {
         }
     });
 
-    context.router.post('/friends', async (req, res) => {
+    router.post('/friends', async (req, res) => {
         if ( !req.cookies ) {
             res.status(401).end();
             return;
@@ -90,7 +91,7 @@ export default () => {
         }
     });
 
-    context.router.delete('/friends', async (req, res) => {
+    router.delete('/friends', async (req, res) => {
         if ( !req.cookies ) {
             res.status(401).end();
             return;

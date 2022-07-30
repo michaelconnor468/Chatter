@@ -1,4 +1,5 @@
 import context from '../context';
+import {Router} from 'express';
 import config from '../config';
 import bcrypt from 'bcrypt';
 import db from '../db';
@@ -18,8 +19,8 @@ const getErrorResponse = (e: Error) => {
     return '{"error": "Something went wrong"}'
 }
 
-export default () => {
-    context.router.post('/user', async (req, res) => {
+export default (router: Router) => {
+    router.post('/user', async (req, res) => {
         try {
             if ( !validateUser(req.body, true) ) {
                 res.status(500).end('{"error": "Invalid user fields"}');
@@ -56,7 +57,7 @@ export default () => {
         }
     });
 
-    context.router.post('/user/login', async (req, res) => {
+    router.post('/user/login', async (req, res) => {
         try {
             if ( !validateUser(req.body, false) ) throw Error('Invalid user data');
             const userQuery = await db.query(`SELECT * FROM "Users" WHERE "Users"."Username"='${req.body.username}'`);
@@ -79,7 +80,7 @@ export default () => {
         }
     });
 
-    context.router.delete('/user/login', async (req, res) => {
+    router.delete('/user/login', async (req, res) => {
         try {
             res.cookie('chatter-jwt', {username: '', password: ''}, { maxAge: 10, sameSite: 'strict' })
             res.status(200).end();
