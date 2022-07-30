@@ -1,7 +1,6 @@
 import context from '../context';
 import {Pool} from "pg";
 import {Router} from 'express';
-import config from '../config';
 
 interface User {
     username: string,
