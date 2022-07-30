@@ -2,6 +2,10 @@
 
 Chatter is a real time messaging application I built as a fun little side project to learn more about web development and practice my networking and REACT skills. Chatter is built using Typescript and a PostgreSQL database.
 
+## Deployment
+
+Both the node server are containerized and can be automatically deployed and linked using the given docker-compose file.
+
 ## Usage
 
 Chatter allows for creation of account which can add each other as friends. In order to message someone, you must first add them as a friend using their username, and they must then accept your friend invitation before they can show up on your dashboard and you can click on their cards to send messages. Once you are friends with a user, you can chat back and forth in real time with your conversation being saved in the database for future reference.
