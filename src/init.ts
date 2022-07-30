@@ -10,14 +10,14 @@ import service from './service';
 import cookieParser from 'cookie-parser';
 
 const PORT: number = config.port;
-const app = context.router;
+const app = express();
 
 app.use(cors());
 app.use(cookieParser())
 app.use(express.json());
 app.use(express.static('client'));
 
-service();
+service(app);
 
 const server = http.createServer(app);
 const io = new Server(server);
