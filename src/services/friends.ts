@@ -31,7 +31,7 @@ export default (router: Router, db: Pool) => {
                 return;
             }
             res.status(200).end(JSON.stringify(query.rows));
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));
         }
@@ -56,7 +56,7 @@ export default (router: Router, db: Pool) => {
                             (SELECT "Friend" FROM "Friends" WHERE "User"='${cookies.username}');
             `);
             res.status(200).end(JSON.stringify(query.rows));
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));
         }
@@ -84,7 +84,7 @@ export default (router: Router, db: Pool) => {
                 return;
             }
             res.status(201).end();
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(200).end();
         }
@@ -112,7 +112,7 @@ export default (router: Router, db: Pool) => {
                 return;
             }
             res.status(201).end();
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));
         }

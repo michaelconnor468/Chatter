@@ -22,11 +22,11 @@ service(app, pool);
 const server = http.createServer(app);
 const io = new Server(server);
 
-io.on('connection', socket => {
+io.on('connection', async socket => {
   const cookie = socket.handshake.headers.cookie;
   if ( !cookie ) return;
   const jwt = JSON.parse(context.getCookie('chatter-jwt', decodeURIComponent(cookie)));
-  if ( context.authorizeJWT(jwt) )
+  if ( await context.authorizeJWT(jwt) )
     context.sockets.set(jwt.username, 
       {
         socket: socket, 

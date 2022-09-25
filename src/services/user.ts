@@ -51,7 +51,7 @@ export default (router: Router, db: Pool) => {
 
             res.cookie('chatter-jwt', jwt, { maxAge: 60*60*1000, sameSite: 'strict' })
             res.status(201).end(jwt);
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));
         }
@@ -74,7 +74,7 @@ export default (router: Router, db: Pool) => {
             const jwt = JSON.stringify(await signJWT({username: req.body.username, hash: ''}));
             res.cookie('chatter-jwt', jwt, { maxAge: 60*60*1000, sameSite: 'strict' })
             res.status(201).end(jwt);
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));
         }
@@ -84,7 +84,7 @@ export default (router: Router, db: Pool) => {
         try {
             res.cookie('chatter-jwt', {username: '', password: ''}, { maxAge: 10, sameSite: 'strict' })
             res.status(200).end();
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));
         }

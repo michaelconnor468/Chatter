@@ -37,7 +37,7 @@ export default (router: Router, db: Pool) => {
             }
             context.sockets.get(req.body.friend)?.socket.emit('message', {Sender: cookies.username, Receiver: req.body.friend, Message: req.body.message, Time: (new Date()).toUTCString(), Read: true});
             res.status(201).end();
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));
         }
@@ -74,7 +74,7 @@ export default (router: Router, db: Pool) => {
                     OR ("Receiver"='${cookies.username}' AND "Sender"='${req.query.friend}')
             `);
             res.status(201).end(JSON.stringify(query.rows));
-        } catch (e) {
+        } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));
         }
