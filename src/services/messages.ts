@@ -20,7 +20,7 @@ const getErrorResponse = (e: Error) => {
 export default (router: Router, db: Pool) => {
     router.post('/messages', async (req, res) => {
         try {
-            const query = await db.query(`INSERT INTO "Messages" VALUES ('${req.jwt.username}', '${req.body.friend}', CURRENT_TIMESTAMP, '${req.body.message}', 'FALSE');`);
+            const query = await db.query(`INSERT INTO "Messages" VALUES ('$1', '$2', CURRENT_TIMESTAMP, '$3', 'FALSE');`, [req.jwt.username, req.body.friend, req.body.message]);
             if ( query.rowCount < 1 ) {
                 res.status(404).end();
                 return;
@@ -38,11 +38,11 @@ export default (router: Router, db: Pool) => {
             const query = await db.query(`
                 SELECT *
                 FROM "Messages" 
-                WHERE ("Sender"='${req.jwt.username}' AND "Receiver"='${req.query.friend}') 
-                    OR ("Receiver"='${req.jwt.username}' AND "Sender"='${req.query.friend}')
+                WHERE ("Sender"='$1' AND "Receiver"='$2') 
+                    OR ("Receiver"='$1' AND "Sender"='$2')
                 ORDER BY "Time" DESC
                 LIMIT 20
-            `);
+            `, [req.jwt.username, req.query.friend]);
             if ( query.rowCount < 1 ) {
                 res.status(404).end();
                 return;
@@ -50,9 +50,9 @@ export default (router: Router, db: Pool) => {
             const updateQuery = await db.query(`
                 UPDATE "Messages"
                 SET "Read"='TRUE'
-                WHERE ("Sender"='${req.jwt.username}' AND "Receiver"='${req.query.friend}') 
-                    OR ("Receiver"='${req.jwt.username}' AND "Sender"='${req.query.friend}')
-            `);
+                WHERE ("Sender"='$1' AND "Receiver"='$2') 
+                    OR ("Receiver"='$1' AND "Sender"='$2')
+            `, [req.jwt.username, req.query.friend]);
             res.status(201).end(JSON.stringify(query.rows));
         } catch (e: any) {
             console.trace(e);

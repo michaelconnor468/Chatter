@@ -11,10 +11,10 @@ export default (router: Router, db: Pool) => {
         try {
             const query = await db.query(`
                 SELECT f1."Friend" FROM "Friends" AS f1, "Friends" AS f2 
-                    WHERE f1."User"='${req.jwt.username}' 
-                        AND f2."Friend"='${req.jwt.username}' 
+                    WHERE f1."User"='$1' 
+                        AND f2."Friend"='$1' 
                         AND f1."Friend"=f2."User";
-            `);
+            `, [req.jwt.username]);
             if ( query.rowCount < 1 ) {
                 res.status(200).end('[]');
                 return;
@@ -30,10 +30,10 @@ export default (router: Router, db: Pool) => {
         try {
             const query = await db.query(`
                 SELECT "User" FROM "Friends" 
-                    WHERE "Friend"='${req.jwt.username}' 
+                    WHERE "Friend"='$1' 
                         AND "User" NOT IN 
-                            (SELECT "Friend" FROM "Friends" WHERE "User"='${req.jwt.username}');
-            `);
+                            (SELECT "Friend" FROM "Friends" WHERE "User"='$1');
+            `, [req.jwt.username]);
             res.status(200).end(JSON.stringify(query.rows));
         } catch (e: any) {
             console.trace(e);
@@ -47,7 +47,7 @@ export default (router: Router, db: Pool) => {
                 res.status(201).end();
                 return;
             }
-            const query = await db.query(`INSERT INTO "Friends" VALUES ('${req.jwt.username}', '${req.body.username}');`);
+            const query = await db.query(`INSERT INTO "Friends" VALUES ('$1', '$2');`, [req.jwt.username, req.body.username]);
             if ( query.rowCount < 1 ) {
                 res.status(404).end();
                 return;
@@ -63,9 +63,9 @@ export default (router: Router, db: Pool) => {
         try {
             const query = await db.query(`
                 DELETE FROM "Friends" WHERE 
-                    ("User"='${req.jwt.username}' AND "Friend"='${req.body.username}') 
-                        OR ("User"='${req.body.username}' AND "Friend"='${req.jwt.username}');
-            `);
+                    ("User"='$1' AND "Friend"='$2') 
+                        OR ("User"='$2' AND "Friend"='$1');
+            `, [req.jwt.username, req.body.username]);
             if ( query.rowCount < 1 ) {
                 res.status(404).end();
                 return;
