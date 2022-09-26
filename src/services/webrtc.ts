@@ -19,28 +19,10 @@ const getErrorResponse = (e: Error) => {
 
 export default (router: Router, db: Pool) => {
     router.post('/webrtc', async (req, res) => {
-        if ( !req.cookies ) {
-            res.status(401).end();
-            return;
-        }
-        const cookies = JSON.parse(req.cookies['chatter-jwt']);
-        if ( !cookies || !context.authorizeJWT(cookies) ) {
-            res.status(401).end();
-            return;
-        }
         // TODO for creating webrtc sessions from a given user
     });
 
     router.get('/webrtc', async (req, res) => {
-        if ( !req.cookies ) {
-            res.status(401).end();
-            return;
-        }
-        const cookies = JSON.parse(req.cookies['chatter-jwt']);
-        if ( !cookies || !context.authorizeJWT(cookies) ) {
-            res.status(401).end();
-            return;
-        }
         // TODO return non-expired webrtc sessions related to a given user
     });
 }
