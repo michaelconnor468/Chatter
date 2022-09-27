@@ -21,7 +21,10 @@ CREATE TABLE "Messages" (
     "Read" BOOLEAN NOT NULL DEFAULT 'FALSE'
 );
 
-CREATE TABLE "VideoRooms" (
+CREATE TABLE "VideoRoom" (
     "Owner" TEXT NOT NULL REFERENCES "Users" ("Username"),
-    "Guest" TEXT NOT NULL REFERENCES "Users" ("Username")
+    "Guest" TEXT NOT NULL REFERENCES "Users" ("Username"),
+    "OfferObject" TEXT NOT NULL,
+    "Expiry" TIMESTAMP NOT NULL,
+    "Expired" BOOLEAN NOT NULL DEFAULT 'FALSE'
 );
