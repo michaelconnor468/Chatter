@@ -18,15 +18,24 @@ const Video: React.FC<VideoProps> = (props) => {
     const webcam_ref = React.useRef<HTMLVideoElement>(null);
     const remote_ref = React.useRef<HTMLVideoElement>(null);
 
-    const setupRTC = async () => {
+    const initiateRTC = async () => {
         const stun_servers = {
           iceServers: [{urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']},],
           iceCandidatePoolSize: 10,
         };
         const rtc = new RTCPeerConnection(stun_servers);
+        const rawResponse = await fetch(`${config.domain}/messages`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({offer: offer, username: props.friend})
+        });
+        if ( rawResponse.ok ) await rtc.setLocalDescription(offer);
+
         const local_stream = await navigator.mediaDevices.getUserMedia({video:true, audio: true});
         const remote_stream = new MediaStream();
-
         local_stream.getTracks().forEach((track) => rtc.addTrack(track, local_stream));
         rtc.ontrack = (event) => event.streams[0].getTracks().forEach((track) => remote_stream.addTrack(track));
         const webcam_video = ReactDOM.findDOMNode(webcam_ref.current) as HTMLVideoElement;
@@ -35,6 +44,15 @@ const Video: React.FC<VideoProps> = (props) => {
             webcam_video.srcObject = local_stream;
             remote_video.srcObject = remote_stream;
         }
+        const offer = await rtc.createOffer();
+    }
+
+    const terminateRTC = async () => {
+        // TODO
+    }
+
+    const acceptRTC = async () => {
+        // TODO
     }
 
     return (

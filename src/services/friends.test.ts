@@ -1,5 +1,5 @@
 import friendsRouter from './friends';
-import pg from 'pg';
+import {Pool} from 'pg';
 import {Router} from 'express';
 
 const router = {
@@ -9,14 +9,14 @@ const router = {
     put: jest.fn()
 } as unknown as Router;
 
-// Can setup friendsRouter with mock db and mock router here and test the functions it registers for each
-// endpoint giving them mock query results and seeing if they set the result appropriately
+const db = {
+    query: jest.fn()
+} as unknown as Pool;
 
 describe('TestFriendsEndpoints', () => {
-    const mockDB = new pg.Pool();
-    friendsRouter(router, mockDB);
+    friendsRouter(router, db);
 
-    test('TestFriendsEndpointsRegistered', () => {
+    it('should register the correct enpoint names', () => {
         expect(router.get).toHaveBeenCalledTimes(2);
         expect(router.get).toHaveBeenCalledWith('/friends', expect.anything());
         expect(router.get).toHaveBeenCalledWith('/friends/invites', expect.anything());
