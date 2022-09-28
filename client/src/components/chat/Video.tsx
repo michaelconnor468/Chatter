@@ -24,6 +24,7 @@ const Video: React.FC<VideoProps> = (props) => {
           iceCandidatePoolSize: 10,
         };
         const rtc = new RTCPeerConnection(stun_servers);
+        const offer = await rtc.createOffer();
         const rawResponse = await fetch(`${config.domain}/messages`, {
             method: 'POST',
             headers: {
@@ -44,7 +45,6 @@ const Video: React.FC<VideoProps> = (props) => {
             webcam_video.srcObject = local_stream;
             remote_video.srcObject = remote_stream;
         }
-        const offer = await rtc.createOffer();
     }
 
     const terminateRTC = async () => {
