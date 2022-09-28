@@ -17,6 +17,7 @@ const Video: React.FC<VideoProps> = (props) => {
     const [isCalling, setIsCalling] = React.useState(true);
     const webcam_ref = React.useRef<HTMLVideoElement>(null);
     const remote_ref = React.useRef<HTMLVideoElement>(null);
+    let rtc;
 
     const initiateRTC = async () => {
         const stun_servers = {
@@ -25,7 +26,7 @@ const Video: React.FC<VideoProps> = (props) => {
         };
         const rtc = new RTCPeerConnection(stun_servers);
         const offer = await rtc.createOffer();
-        const rawResponse = await fetch(`${config.domain}/messages`, {
+        const rawResponse = await fetch(`${config.domain}/webrtc`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -48,7 +49,7 @@ const Video: React.FC<VideoProps> = (props) => {
     }
 
     const terminateRTC = async () => {
-        const rawResponse = await fetch(`${config.domain}/messages`, {
+        const rawResponse = await fetch(`${config.domain}/webrtc`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -60,7 +61,15 @@ const Video: React.FC<VideoProps> = (props) => {
     }
 
     const acceptRTC = async () => {
-        // TODO
+        const rawResponse = await fetch(`${config.domain}/webrtc`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: '{}'
+        });
+        if ( rawResponse.ok );
     }
 
     return (
