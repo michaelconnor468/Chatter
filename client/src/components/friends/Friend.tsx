@@ -40,7 +40,7 @@ const Friend: React.FC<FriendProps> = (props) => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({owner: friend})
+            body: JSON.stringify({owner: friend, method: 'hangup'})
         });
     }
 

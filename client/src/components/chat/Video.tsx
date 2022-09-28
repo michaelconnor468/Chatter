@@ -9,6 +9,7 @@ import Chat from './Chat';
 
 interface VideoProps { 
     friend: string,
+    rtc_offer?: string,
     setBody: React.Dispatch<React.SetStateAction<JSX.Element>>
 }
 

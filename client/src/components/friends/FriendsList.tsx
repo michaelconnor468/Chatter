@@ -96,8 +96,16 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
         setError(responce.error);
     };
     
-    const acceptCall = async (friend: string, offer: string | null) => {
-        // TODO
+    const acceptCall = async (friend: string, offer: string) => {
+        props.setBody(<Video rtc_offer={offer} friend={props.friend} setBody={props.setBody} />);
+        const rawResponse = await fetch(`${config.domain}/webrtc`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({owner: friend, method: 'answer'})
+        });
     }
 
     return (
