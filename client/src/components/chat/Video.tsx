@@ -48,7 +48,15 @@ const Video: React.FC<VideoProps> = (props) => {
     }
 
     const terminateRTC = async () => {
-        // TODO
+        const rawResponse = await fetch(`${config.domain}/messages`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({username: props.friend})
+        });
+        if ( rawResponse.ok );
     }
 
     const acceptRTC = async () => {

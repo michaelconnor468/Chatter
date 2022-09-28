@@ -57,4 +57,23 @@ export default (router: Router, db: Pool) => {
             res.status(500).end(getErrorResponse(e));
         }
     });
+
+    router.delete('/webrtc', async (req, res) => {
+        try {
+            const query = await db.query(`
+                UPDATE "VideoRoom"
+                SET "Expired"=TRUE
+                WHERE "Owner"=$1 AND "Guest"=$2 AND "Expired"=FALSE
+
+            `, [req.jwt.username, req.body.username]);
+            if ( query.rowCount < 1 ) {
+                res.status(200).end('[]');
+                return;
+            }
+            res.status(200).end(JSON.stringify(query.rows));
+        } catch (e: any) {
+            console.trace(e);
+            res.status(500).end(getErrorResponse(e));
+        }
+    });
 }
