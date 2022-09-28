@@ -13,33 +13,56 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
     const [inviteList, setInviteList] = React.useState<string[]>([]);
     const [newFriend, setNewFriend] = React.useState<string>('');
     const [friendsList, setFriendsList] = React.useState<string[]>([]);
+    const [callList, setCallList] = React.useState<string[]>([]);
     const [error, setError] = React.useState<string>('');
 
-    React.useEffect(() => {fetchFriendsList();}, []);
+    React.useEffect(() => {
+        fetchFriendsList();
+        // TODO setup websocket listeners for video calls and hangups
+        authContext.socket.on('video-call', (caller: string) => {});
+        authContext.socket.on('video-hangup', (caller: string) => {});
+    }, []);
 
     const fetchFriendsList = async () => {
-        const rawResponse = await fetch(`${config.domain}/friends/invites`, {
+        const invites = await fetch(`${config.domain}/friends/invites`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         });
-        const responce = await rawResponse.json();
-        if ( rawResponse.ok ) setInviteList(responce.map((query: {User: string}) => query.User));
+        const invitesJSON = await invites.json();
+        if ( invites.ok ) setInviteList(invitesJSON.map((query: {User: string}) => query.User));
         else setError(responce.error);
 
-        const rawResponse2 = await fetch(`${config.domain}/friends`, {
+        const friendListResponse = await fetch(`${config.domain}/friends`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         });
-        const responce2 = await rawResponse2.json();
-        if ( rawResponse2.ok ) setFriendsList(responce2.map((query: {Friend: string}) => query.Friend));
-        else setError(responce2.error);
+        const friendListResponseJSON = await friendListResponse.json();
+        if ( friendListResponse.ok ) 
+            setFriendsList(friendListResponseJSON.map((query: {Friend: string}) => query.Friend));
+        else setError(friendListResponseJSON.error);
     };
+
+    const acceptCall = async (friend: string) => {
+        // TODO
+    }
+    
+    const declineCall = async (friend: string) => {
+        const rawResponse = await fetch(`${config.domain}/webrtc`, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({owner: friend})
+        });
+        // TODO
+    }
 
     const acceptInvite = async (friend: string) => {
         const rawResponse = await fetch(`${config.domain}/friends`, {
@@ -95,8 +118,8 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
     return (
         <Card className={styles.card}>
             {error ? <h1 className={styles.error}>{error}</h1> : <></>}
-            {inviteList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} invite={true}></Friend>)}
-            {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} onClick={() => props.setBody(<Chat friend={friend} setBody={props.setBody} />)}></Friend>)}
+            {inviteList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} invite={true} acceptCall={acceptCall} declineCall={declineCall}></Friend>)}
+            {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} acceptCall={acceptCall} declineCall={declineCall} name={friend} onClick={() => props.setBody(<Chat friend={friend} setBody={props.setBody} />)}></Friend>)}
             <Card className={styles.addfriend}>
                 <div>
                     <label htmlFor='add-friend'>Add User:</label>

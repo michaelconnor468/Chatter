@@ -7,11 +7,14 @@ interface FriendProps {
     invite?: boolean,
     removeFriend: (friend: string) => Promise<void>,
     acceptInvite: (friend: string) => Promise<void>,
+    acceptCall: (friend: string) => Promise<void>,
+    declineCall: (friend: string) => Promise<void>,
     onClick?: () => void
 }
 
 const Friend: React.FC<FriendProps> = (props) => {
     const [login, setLogin] = React.useState(true);
+    // TODO accept call button here if friend is calling us
 
     return (
         <Card className={styles.friend} onClick={props.onClick || undefined}>

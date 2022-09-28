@@ -20,6 +20,10 @@ const Video: React.FC<VideoProps> = (props) => {
     let rtc;
 
     const initiateRTC = async () => {
+        // TODO websockets bit
+        authContext.socket.on('video-answer', (caller: string) => {});
+        authContext.socket.on('video-hangup', (caller: string) => {});
+
         const stun_servers = {
           iceServers: [{urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']},],
           iceCandidatePoolSize: 10,
@@ -55,19 +59,19 @@ const Video: React.FC<VideoProps> = (props) => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({username: props.friend})
+            body: JSON.stringify({username: props.friend, method: 'hangup'})
         });
         if ( rawResponse.ok );
     }
 
     const acceptRTC = async () => {
         const rawResponse = await fetch(`${config.domain}/webrtc`, {
-            method: 'GET',
+            method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: '{}'
+            body: JSON.stringify({username: props.friend, method: 'answer'})
         });
         if ( rawResponse.ok );
     }
