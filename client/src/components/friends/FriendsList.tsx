@@ -18,9 +18,6 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
 
     React.useEffect(() => {
         fetchFriendsList();
-        // TODO setup websocket listeners for video calls and hangups
-        authContext.socket.on('video-call', (caller: string) => {});
-        authContext.socket.on('video-hangup', (caller: string) => {});
     }, []);
 
     const fetchFriendsList = async () => {
@@ -33,7 +30,7 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
         });
         const invitesJSON = await invites.json();
         if ( invites.ok ) setInviteList(invitesJSON.map((query: {User: string}) => query.User));
-        else setError(responce.error);
+        else setError(invitesJSON.error);
 
         const friendListResponse = await fetch(`${config.domain}/friends`, {
             method: 'GET',
@@ -47,23 +44,7 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
             setFriendsList(friendListResponseJSON.map((query: {Friend: string}) => query.Friend));
         else setError(friendListResponseJSON.error);
     };
-
-    const acceptCall = async (friend: string) => {
-        // TODO
-    }
     
-    const declineCall = async (friend: string) => {
-        const rawResponse = await fetch(`${config.domain}/webrtc`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({owner: friend})
-        });
-        // TODO
-    }
-
     const acceptInvite = async (friend: string) => {
         const rawResponse = await fetch(`${config.domain}/friends`, {
             method: 'POST',
@@ -114,12 +95,16 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
         const responce = await rawResponse.json();
         setError(responce.error);
     };
+    
+    const acceptCall = async (friend: string, offer: string | null) => {
+        // TODO
+    }
 
     return (
         <Card className={styles.card}>
             {error ? <h1 className={styles.error}>{error}</h1> : <></>}
-            {inviteList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} invite={true} acceptCall={acceptCall} declineCall={declineCall}></Friend>)}
-            {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} acceptCall={acceptCall} declineCall={declineCall} name={friend} onClick={() => props.setBody(<Chat friend={friend} setBody={props.setBody} />)}></Friend>)}
+            {inviteList.map(friend => <Friend key={friend} acceptCall={acceptCall} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} invite={true}></Friend>)}
+            {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} onClick={() => props.setBody(<Chat friend={friend} setBody={props.setBody} />)}></Friend>)}
             <Card className={styles.addfriend}>
                 <div>
                     <label htmlFor='add-friend'>Add User:</label>

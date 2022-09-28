@@ -61,7 +61,6 @@ const Video: React.FC<VideoProps> = (props) => {
             },
             body: JSON.stringify({username: props.friend, method: 'hangup'})
         });
-        if ( rawResponse.ok );
     }
 
     const acceptRTC = async () => {
@@ -73,7 +72,6 @@ const Video: React.FC<VideoProps> = (props) => {
             },
             body: JSON.stringify({username: props.friend, method: 'answer'})
         });
-        if ( rawResponse.ok );
     }
 
     return (

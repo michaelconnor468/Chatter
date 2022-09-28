@@ -33,6 +33,13 @@
     width: 9rem;
 }
 
+.buttons img {
+    border: 0px;
+    cursor: pointer;
+    height: 3rem;
+    width: 3rem;
+}
+
 .buttons button:hover {
     filter: brightness(90%);
 }
