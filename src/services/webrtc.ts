@@ -43,7 +43,7 @@ export default (router: Router, db: Pool) => {
     router.get('/webrtc', async (req, res) => {
         try {
             const query = await db.query(`
-                SELECT "Offer"
+                SELECT "Offer", "Owner"
                 FROM "VideoRoom"
                 WHERE "Guest"=$1 AND "Expired"=FALSE AND to_timestamp($2 / 1000.0)<"Expiry"
 

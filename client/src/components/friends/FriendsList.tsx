@@ -4,6 +4,9 @@ import Friend from './Friend';
 import styles from './FriendsList.module.css';
 import Card from '../util/Card';
 import Chat from '../chat/Chat';
+import Video from '../chat/Video';
+    
+let calls_to_offers: Map<string, string> = new Map();
 
 interface FriendsListProps {
     setBody: React.Dispatch<React.SetStateAction<JSX.Element>>
@@ -18,6 +21,7 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
 
     React.useEffect(() => {
         fetchFriendsList();
+        fetchCalls();
     }, []);
 
     const fetchFriendsList = async () => {
@@ -97,7 +101,6 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
     };
     
     const acceptCall = async (friend: string, offer: string) => {
-        props.setBody(<Video rtc_offer={offer} friend={props.friend} setBody={props.setBody} />);
         const rawResponse = await fetch(`${config.domain}/webrtc`, {
             method: 'DELETE',
             headers: {
@@ -106,12 +109,29 @@ const FriendsList: React.FC<FriendsListProps> = (props) => {
             },
             body: JSON.stringify({owner: friend, method: 'answer'})
         });
+        const response = await rawResponse.json();
+        if (response.ok) props.setBody(<Video rtc_offer={offer} friend={friend} setBody={props.setBody} />);
+    }
+    
+    const fetchCalls = async () => {
+        calls_to_offers = new Map();
+        const rawResponse = await fetch(`${config.domain}/webrtc`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: '{}'
+        });
+        const responseJSON = await rawResponse.json();
+        if (responseJSON.ok)
+            responseJSON.forEach((res: {Owner: string, Offer: string}) => calls_to_offers.set(res.Owner, res.Offer));
     }
 
     return (
         <Card className={styles.card}>
             {error ? <h1 className={styles.error}>{error}</h1> : <></>}
-            {inviteList.map(friend => <Friend key={friend} acceptCall={acceptCall} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} invite={true}></Friend>)}
+            {inviteList.map(friend => <Friend key={friend} acceptCall={acceptCall} call={calls_to_offers.get(friend)} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} invite={true}></Friend>)}
             {friendsList.map(friend => <Friend key={friend} removeFriend={removeFriend} acceptInvite={acceptInvite} name={friend} onClick={() => props.setBody(<Chat friend={friend} setBody={props.setBody} />)}></Friend>)}
             <Card className={styles.addfriend}>
                 <div>

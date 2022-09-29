@@ -7,29 +7,25 @@ import { AuthContext } from '../../App';
 interface FriendProps {
     name: string,
     invite?: boolean,
+    call?: string,
     removeFriend: (friend: string) => Promise<void>,
     acceptInvite: (friend: string) => Promise<void>,
-    acceptCall?: (friend: string, offer: string | null) => Promise<void>,
+    acceptCall?: (friend: string, offer: string) => Promise<void>,
     onClick?: () => void
 }
 
 const Friend: React.FC<FriendProps> = (props) => {
     const authContext = React.useContext(AuthContext);
     const [login, setLogin] = React.useState(true);
-    const [calling, setCalling] = React.useState(false);
-    let webrtc_offer: string | null = null;
-
-    const fetchCalls = (caller: string) => {
-        // TODO
-    }
+    const [callOffer, setCallOffer] = React.useState('');
 
     React.useEffect(() => {
-        fetchCalls(props.name);
-        authContext.socket.on('video-call', (caller: string) => {
-            if (caller === props.name) setCalling(true); 
+        setCallOffer(props.call || '');
+        authContext.socket.on('video-call', (caller: string, offer: string) => {
+            if (caller === props.name) setCallOffer(offer); 
         });
         authContext.socket.on('video-hangup', (caller: string) => {
-            if (caller === props.name) setCalling(false);
+            if (caller === props.name) setCallOffer('');
         });
     }, []);
     
@@ -49,7 +45,7 @@ const Friend: React.FC<FriendProps> = (props) => {
             <h1>{props.name}</h1>
             <div className={styles.buttons}>
                 {props.invite ? <button onClick={() => props.acceptInvite(props.name)}>Accept</button> : <></>}
-                {calling ? <><img onClick={() => props.acceptCall ? props.acceptCall(props.name, webrtc_offer) : ''} src='resources/answer.png'></img>
+                {callOffer ? <><img onClick={() => props.acceptCall ? props.acceptCall(props.name, callOffer) : ''} src='resources/answer.png'></img>
                     <img onClick={() => declineCall(props.name)} src='resources/hangup.png'></img></> : <></>}
                 <button onClick={(e) => {props.removeFriend(props.name); e.stopPropagation();}}>Remove</button>
             </div>
