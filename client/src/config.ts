@@ -1,3 +1,3 @@
 export default {
-    domain: 'http://localhost:8000'
+    domain: 'http://' + window.location.host
 }

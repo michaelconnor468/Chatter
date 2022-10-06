@@ -27,17 +27,17 @@ export default (router: Router, db: Pool) => {
                 return;
             }
             const hashedPassword = await hashPassword(req.body);
-            const userQuery = await db.query(`SELECT "Username" FROM "Users" WHERE "Users"."Username"='$1'`, [req.body.username]);
+            const userQuery = await db.query(`SELECT "Username" FROM "Users" WHERE "Users"."Username"=$1`, [req.body.username]);
             if ( userQuery.rowCount > 0 ) {
                 res.status(500).end('{"error": "Username already taken"}');
                 return;
             }
-            const emailQuery = await db.query(`SELECT "Email" FROM "Users" WHERE "Users"."Email"='$1'`, [req.body.email]);
+            const emailQuery = await db.query(`SELECT "Email" FROM "Users" WHERE "Users"."Email"=$1`, [req.body.email]);
             if ( emailQuery.rowCount > 0 ) {
                 res.status(500).end('{"error": "Email already taken"}');
                 return;
             }
-            const insertQuery = await db.query(`INSERT INTO "Users" VALUES ('$1', '$2', '$3', '$4');`, [req.body.username, req.body.email, hashedPassword.password, hashedPassword.salt]);
+            const insertQuery = await db.query(`INSERT INTO "Users" VALUES ($1, $2, $3, $4);`, [req.body.username, req.body.email, hashedPassword.password, hashedPassword.salt]);
             if ( insertQuery.rowCount < 1 ) {
                 res.status(500).end('{"error": "Failed to create new user"}');
                 return;
@@ -45,8 +45,8 @@ export default (router: Router, db: Pool) => {
             const jwt = JSON.stringify(await signJWT({username: req.body.username, hash: ''}));
 
             if ( config.demo ) {
-                await db.query(`INSERT INTO "Friends" VALUES ('$1', 'DemoUser');`, [req.body.username]);
-                await db.query(`INSERT INTO "Friends" VALUES ('DemoUser', '$1');`, [req.body.username]);
+                await db.query(`INSERT INTO "Friends" VALUES ($1, 'DemoUser');`, [req.body.username]);
+                await db.query(`INSERT INTO "Friends" VALUES ('DemoUser', $1);`, [req.body.username]);
             }
 
             res.cookie('chatter-jwt', jwt, { maxAge: 60*60*1000, sameSite: 'strict' })
@@ -60,7 +60,7 @@ export default (router: Router, db: Pool) => {
     router.post('/user/login', async (req, res) => {
         try {
             if ( !validateUser(req.body, false) ) throw Error('Invalid user data');
-            const userQuery = await db.query(`SELECT * FROM "Users" WHERE "Users"."Username"='$1'`, [req.body.username]);
+            const userQuery = await db.query(`SELECT * FROM "Users" WHERE "Users"."Username"=$1`, [req.body.username]);
             if ( userQuery.rowCount < 1 ) {
                 res.status(500).end('{"error": "Username does not exist"}');
                 return;
