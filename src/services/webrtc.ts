@@ -46,7 +46,6 @@ export default (router: Router, db: Pool) => {
                 SELECT "Offer", "Owner"
                 FROM "VideoRoom"
                 WHERE "Guest"=$1 AND "Expired"=FALSE AND to_timestamp($2 / 1000.0)<"Expiry"
-
             `, [req.jwt.username, Date.now()]);
             if ( query.rowCount < 1 ) {
                 res.status(200).end('[]');
@@ -61,12 +60,11 @@ export default (router: Router, db: Pool) => {
 
     router.delete('/webrtc', async (req, res) => {
         try {
-            context.sockets.get(req.body.username)?.socket.emit('video-' + req.body.method, {Guest: req.jwt.username});
+            context.sockets.get(req.body.username)?.socket.emit('video-' + req.body.method, {friend: req.jwt.username, answer: req.body.answer});
             const query = await db.query(`
                 UPDATE "VideoRoom"
                 SET "Expired"=TRUE
                 WHERE (("Owner"=$1 AND "Guest"=$2) OR ("Owner"=$2 AND "Guest"=$1)) AND "Expired"=FALSE
-
             `, [req.jwt.username, req.body.username]);
             if ( query.rowCount < 1 ) {
                 res.status(200).end('[]');
