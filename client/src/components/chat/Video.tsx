@@ -54,8 +54,9 @@ const Video: React.FC<VideoProps> = (props) => {
             const remote_description = new RTCSessionDescription(JSON.parse(answer));
             await rtc.setRemoteDescription(remote_description);
         });
-        // TODO handle hangup
-        authContext.socket.on('video-hangup', (caller: string, answer: string) => {});
+        authContext.socket.on('video-hangup', (caller: string, answer: string) => {
+            props.setBody(<Chat friend={props.friend} setBody={props.setBody} />);
+        });
 
         initializeMedia();
         const offer = await rtc.createOffer();
