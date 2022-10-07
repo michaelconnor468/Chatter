@@ -39,6 +39,19 @@ export default (router: Router, db: Pool) => {
             res.status(200).end();
         }
     });
+    
+    router.post('/webrtc/ice', async (req, res) => {
+        try {
+            if ( req.jwt.username === req.body.username ) {
+                res.status(201).end();
+                return;
+            }
+            context.sockets.get(req.body.friend)?.socket.emit('video-ice', {Owner: req.jwt.username, Ice: req.body.ice});
+        } catch (e: any) {
+            console.trace(e);
+            res.status(500).end(getErrorResponse(e));
+        }
+    });
 
     router.get('/webrtc', async (req, res) => {
         try {
