@@ -46,7 +46,7 @@ export default (router: Router, db: Pool) => {
                 res.status(201).end();
                 return;
             }
-            context.sockets.get(req.body.friend)?.socket.emit('video-ice', {Owner: req.jwt.username, Ice: req.body.ice});
+            context.sockets.get(req.body.username)?.socket.emit('video-ice', {owner: req.jwt.username, ice: req.body.ice});
         } catch (e: any) {
             console.trace(e);
             res.status(500).end(getErrorResponse(e));

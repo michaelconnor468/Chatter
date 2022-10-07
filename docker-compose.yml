@@ -22,6 +22,13 @@ services:
     networks:
       - chatter-network
 
+  coturn:
+    image: coturn/coturn:4.5.2
+    restart: always
+    network_mode: "host"
+    volumes:
+      - ./turnserver.conf:/etc/coturn/turnserver.conf
+
 networks:
   chatter-network:
     driver: bridge

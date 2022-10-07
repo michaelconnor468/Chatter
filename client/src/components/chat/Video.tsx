@@ -19,11 +19,15 @@ const Video: React.FC<VideoProps> = (props) => {
     const webcam_ref = React.useRef<HTMLVideoElement>(null);
     const remote_ref = React.useRef<HTMLVideoElement>(null);
     const stun_servers = {
-      iceServers: [{urls: ['stun:stun1.l.google.com:19302', 'stun:stun2.l.google.com:19302']}],
-      iceCandidatePoolSize: 10,
+      iceServers: [{urls: ['stun:stun1.l.google.com:19302']}, {urls: 'turn:' + config.hostname + ':3478', username: 'turn', credential: 'turn1234'}]
     };
     const rtc = new RTCPeerConnection(stun_servers);
     let offer : string;
+    rtc.addEventListener('connectionstatechange', event => {
+        if (rtc.connectionState === 'connected') {
+            console.log('WebRTC Connected');
+        }
+    });
 
     React.useEffect(() => {
         if ( props.rtc_offer ) {
@@ -37,7 +41,6 @@ const Video: React.FC<VideoProps> = (props) => {
 
     const initializeMedia = async () => {
         const local_stream = await navigator.mediaDevices.getUserMedia({video:true, audio: true});
-        const remote_stream = new MediaStream();
 
         const webcam_video = ReactDOM.findDOMNode(webcam_ref.current) as HTMLVideoElement;
         const remote_video = ReactDOM.findDOMNode(remote_ref.current) as HTMLVideoElement;
@@ -48,31 +51,16 @@ const Video: React.FC<VideoProps> = (props) => {
             remote_video.srcObject = remoteStream;
         });
         webcam_video.srcObject = local_stream;
-        rtc.addEventListener('connectionstatechange', event => {
-            if (rtc.connectionState === 'connected') {
-                console.log('WebRTC Connected');
-            }
-        });
     }
 
     const initiateRTC = async () => {
         authContext.socket.on('video-answer', async (data) => {
             const remote_description = new RTCSessionDescription(data.answer);
             await rtc.setRemoteDescription(remote_description);
-            rtc.addEventListener('icecandidate', (event) => {
-                if ( event.candidate ) {
-                    fetch(`${config.domain}/webrtc/ice`, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ice: event.candidate, username: props.friend})
-                    });
-                }
-            });
         });
         authContext.socket.on('video-ice', async (data) => {
+            console.log('Candiadate get ' + JSON.stringify(data.ice));
+            if (data.ice === undefined) return;
             try {
                 await rtc.addIceCandidate(data.ice);
             } catch (e) {
@@ -120,14 +108,8 @@ const Video: React.FC<VideoProps> = (props) => {
             },
             body: JSON.stringify({username: props.friend, method: 'answer', answer: answer})
         });
-        authContext.socket.on('video-ice', async (data) => {
-            try {
-                await rtc.addIceCandidate(data.ice);
-            } catch (e) {
-                console.log('Failed to get ice candidate', e);
-            }
-        });
         rtc.addEventListener('icecandidate', (event) => {
+            console.log('sending candidate');
             if ( event.candidate ) {
                 fetch(`${config.domain}/webrtc/ice`, {
                     method: 'POST',
