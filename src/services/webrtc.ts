@@ -28,7 +28,7 @@ export default (router: Router, db: Pool) => {
             const query = await db.query(`
                 INSERT INTO "VideoRoom" 
                 VALUES ($1, $2, $3, to_timestamp($4 / 1000.0), FALSE);
-            `, [req.jwt.username, req.body.username, req.body.offer, new Date(Date.now() + 5*60000)]);
+            `, [req.jwt.username, req.body.username, req.body.offer, new Date(Date.now() + 5*60000).getTime()]);
             if ( query.rowCount < 1 ) {
                 res.status(404).end();
                 return;
@@ -60,7 +60,7 @@ export default (router: Router, db: Pool) => {
 
     router.delete('/webrtc', async (req, res) => {
         try {
-            context.sockets.get(req.body.username)?.socket.emit('video-' + req.body.method, {friend: req.jwt.username, answer: req.body.answer});
+            context.sockets.get(req.body.username)?.socket.emit('video-' + req.body.method, {caller: req.jwt.username, answer: req.body.answer});
             const query = await db.query(`
                 UPDATE "VideoRoom"
                 SET "Expired"=TRUE

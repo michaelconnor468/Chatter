@@ -13,8 +13,8 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
     const [invalidMessage, setInvalidMessage] = React.useState<JSX.Element | null>(null);
     const authContext = React.useContext(AuthContext);
 
-    const submitLogin = async (e: React.ChangeEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const submitLogin = async (e: any) => {
+        if (e) e.preventDefault();
         const rawResponse = await fetch(`${config.domain}/user/login`, {
             method: 'POST',
             headers: {
@@ -36,7 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
             <input type='text' id='login-username' onChange={(e) => setUsername(e.target.value)} />
             <label htmlFor='registration-username'><b>Password</b></label>
             <input type='password' id='login-password' onChange={(e) => setPassword(e.target.value)} />
-            <button type='submit'>Login</button>
+            <button onClick={submitLogin}>Login</button>
             <button onClick={() => props.setLogin(false)}>Create an Account</button>
         </form>
         </>

@@ -66,8 +66,6 @@ export default (router: Router, db: Pool) => {
                 return;
             }
             if ( (await hashPassword(req.body, Object(userQuery.rows[0])['PasswordSalt'])).password !== Object(userQuery.rows[0])['Password'] ) {
-                console.log(await hashPassword(req.body, Object(userQuery.rows[0])['PasswordSalt']));
-                console.log(Object(userQuery.rows[0])['Password']);
                 res.status(500).end('{"error": "Password is incorrect"}');
                 return;
             }

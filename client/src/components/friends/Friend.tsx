@@ -28,7 +28,7 @@ const Friend: React.FC<FriendProps> = (props) => {
             if (caller === props.name) setCallOffer('');
         });
     }, []);
-    
+   
     const declineCall = async (friend: string) => {
         const rawResponse = await fetch(`${config.domain}/webrtc`, {
             method: 'DELETE',

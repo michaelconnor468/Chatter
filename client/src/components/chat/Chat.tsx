@@ -33,7 +33,6 @@ const Chat: React.FC<ChatProps> = (props) => {
             }
         });
         if ( rawResponse.ok ) setMessages((await rawResponse.json()).map((msg: Message) => {return {...msg, Time: new Date(msg.Time)};}));
-        document.getElementsByClassName(styles.content)[0].scrollTop = 99999;
     };
 
     React.useEffect(() => {

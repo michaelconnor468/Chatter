@@ -4,7 +4,7 @@
   "description": "Chatter is a minimalist messaging app with user accounts and authentication.",
   "scripts": {
     "test": "jest dist",
-    "build": "tsc",
+    "build": "tsc && cd client && npm run build",
     "start": "node dist/init.js"
   },
   "repository": {

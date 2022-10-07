@@ -16,9 +16,10 @@
     align-items: center;
 }
 
-.webcams div {
+.webcams video {
     width: 40%;
     height: 100%;
+    padding: 1rem auto;
 }
 
 .content {
